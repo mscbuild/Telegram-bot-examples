@@ -6,7 +6,7 @@ from telebot.async_telebot import AsyncTeleBot
 
 # ====== НАСТРОЙКИ ======
 EMAIL = 'example@mail.com'          # Почта, с которой отправляется
-EMAIL_PWD = 'your_password'          # Пароль от почты
+EMAIL_PWD = 'your_password'          # Пароль от почты (в настройках почты)
 EMAIL_TO = 'example@mail.com'       # Куда отправлять (тот же адрес, фиксированный)
 
 SMTP_HOST = 'smtp.yandex.ru'
