@@ -64,7 +64,8 @@ The `examples/` directory contains the following scripts:
 - **`task.py`**: A Telegram bot for assigning tasks.
 - **`email.py`**: This bot is an email client that works right inside Telegram.
 - **`finances.py`**:  This bot that allows you to keep track of finances.
-
+- **`chatbot.py`**:  The free chatbot by AI .
+  
 Each script includes comments explaining the code and its functionality. To run an example, ensure your bot token is set in the `.env` file, then execute the script.
 
 ## Contributing
