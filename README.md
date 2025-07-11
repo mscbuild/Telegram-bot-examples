@@ -29,7 +29,7 @@ This repository contains example Python scripts for building Telegram bots using
 1. **Clone the repository**:
    ```bash
    git clone https://github.com/mscbuild/Telegram-bot-examples.git
-   cd Telegram-bot-python-examples
+   cd Telegram-bot-examples
    ```
 
 2. **Create a virtual environment** (optional but recommended):
