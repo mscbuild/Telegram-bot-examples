@@ -19,7 +19,7 @@ This repository contains example Python scripts for building Telegram bots using
 ## Installation
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/your-username/telegram-bot-python-examples.git
+   git clone https://github.com/mscbuild/telegram-bot-examples.git
    cd telegram-bot-python-examples
    ```
 
@@ -53,7 +53,7 @@ This repository contains example Python scripts for building Telegram bots using
 The `examples/` directory contains the following scripts:
 - **`echobot.py`**: A simple bot that echoes back any text message it receives.
 - **`task.py`**: A Telegram bot for assigning tasks.
-- **`mailt.py`**: This bot is an email client that works right inside Telegram.
+- **`email.py`**: This bot is an email client that works right inside Telegram.
 - **`finances.py`**:  This bot that allows you to keep track of finances.
 
 Each script includes comments explaining the code and its functionality. To run an example, ensure your bot token is set in the `.env` file, then execute the script.
