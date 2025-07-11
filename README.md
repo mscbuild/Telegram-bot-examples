@@ -1,4 +1,13 @@
 # Telegram-bot-examples python
+ ![](https://komarev.com/ghpvc/?username=mscbuild) 
+ ![](https://img.shields.io/github/license/mscbuild/Telegram-bot-examples) 
+ ![](https://img.shields.io/badge/PRs-Welcome-green)
+ ![](https://img.shields.io/github/languages/code-size/mscbuild/Telegram-bot-examples)
+![](https://img.shields.io/badge/code%20style-python-green)
+![](https://img.shields.io/github/stars/mscbuild)
+![](https://img.shields.io/badge/Topic-Github-lighred)
+![](https://img.shields.io/website?url=https%3A%2F%2Fgithub.com%2Fmscbuild)
+
 
 This repository contains example Python scripts for building Telegram bots using the `python-telegram-bot` library. These examples demonstrate various functionalities, such as responding to messages, handling commands, and integrating with Telegram's API.
 
