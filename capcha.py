@@ -20,8 +20,8 @@ from telegram.ext import (
 )
 
 # --- Конфигурация ---
-TOKEN = "8098160840:AAFtH0mGJ4yy7RTHmScALd6c66vq_KWIbxw"
-log_channel_id = -1002509686305  # Замените на ID вашего лог-канала
+TOKEN = "KEY_token"
+log_channel_id = xxxxxxxxx  # Замените на ID вашего лог-канала
 max_messages = 5
 per_seconds = 10
 CAPTCHA_ANSWER = "август"
@@ -296,3 +296,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
