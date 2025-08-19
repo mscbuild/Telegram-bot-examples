@@ -230,7 +230,7 @@ async def main():
     
     repository = TaskRepository(session)
     analyzer = TaskAnalyzer()
-    bot = TaskBot("8098160840:AAFtH0mGJ4yy7RTHmScALd6c66vq_KWIbxw", repository, analyzer)
+    bot = TaskBot("KEY", repository, analyzer)
     await bot.start()
 
 if platform.system() == "Emscripten":
