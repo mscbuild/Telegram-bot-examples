@@ -217,7 +217,7 @@ async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # --- Основной запуск ---
 def main():
     # Создание приложения с токеном
-    app = ApplicationBuilder().token("8098160840:AAFtH0mGJ4yy7RTHmScALd6c66vq_KWIbxw").build()
+    app = ApplicationBuilder().token("Key_token").build()
 
     # Обработчики команд
     app.add_handler(CommandHandler("start", start))
@@ -257,4 +257,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
