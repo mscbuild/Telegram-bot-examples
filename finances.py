@@ -40,6 +40,7 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "/report — Показать отчёт\n"
         "/chart — Показать диаграмму расходов\n"
         "/export — Экспортировать данные в CSV\n"
+         "/setname — Проверка валидности\n"
         "/delete_data — Удалить все данные\n"
         "Вы можете также выбрать действия с помощью кнопок ниже:",
         reply_markup=get_main_menu()
@@ -51,6 +52,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "👋 Привет! Я бот для учёта финансов. Выберите действие:",
         reply_markup=get_main_menu()
     )
+
+ 
 
 # --- Обработка кнопок ---
 async def handle_button_press(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -131,7 +134,7 @@ async def save_expense(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # --- Сохранение в CSV ---
 def save_to_csv(type_, amount, category):
     df = pd.DataFrame([{
-        "Дата": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "Дата": datetime.now(),
         "Тип": type_,
         "Сумма": amount,
         "Категория": category or ""
@@ -149,8 +152,9 @@ async def balance(update: Update, context: ContextTypes.DEFAULT_TYPE):
     expense = df[df["Тип"] == "Расход"]["Сумма"].sum()
     bal = income - expense
     await update.message.reply_text(
-        f"📊 Баланс: {bal:.2f}{currency}\n"
-        f"Доход: {income:.2f}{currency}, Расход: {expense:.2f}{currency}",
+        f"💰 Доход: {income:.2f}{currency}\n\n"
+        f"💹 Расход: {expense:.2f}{currency}\n"
+        f"📊 Остаток: {bal:.2f}{currency}\n",
         reply_markup=get_main_menu()
     )
 
@@ -176,7 +180,7 @@ async def chart(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Построение диаграммы
     fig, ax = plt.subplots()
     summary.plot(kind="pie", autopct="%1.1f%%", ylabel="", ax=ax)
-    plt.title("💸 Расходы по категориям")
+    plt.title("Расходы по категориям")
     plt.tight_layout()
 
     # Используем BytesIO для сохранения изображения в памяти
@@ -213,7 +217,7 @@ async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # --- Основной запуск ---
 def main():
     # Создание приложения с токеном
-    app = ApplicationBuilder().token("Your_token").build()
+    app = ApplicationBuilder().token("8098160840:AAFtH0mGJ4yy7RTHmScALd6c66vq_KWIbxw").build()
 
     # Обработчики команд
     app.add_handler(CommandHandler("start", start))
