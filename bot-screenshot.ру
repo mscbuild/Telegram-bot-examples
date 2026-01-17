@@ -1,0 +1,57 @@
+import asyncio
+import os
+import easyocr  # Современная нейросеть для OCR
+from aiogram import Bot, Dispatcher, types, F
+from aiogram.filters import Command
+
+TOKEN = "ВАШ_ТОКЕН"
+bot = Bot(token=TOKEN)
+dp = Dispatcher()
+
+# Инициализируем нейросеть (русский + английский языки)
+reader = easyocr.Reader(['ru', 'en'])
+
+FRAUD_KEYWORDS = ["безопасный счет", "код из смс", "срочно переведите", "выигрыш"]
+
+async def analyze_fraud(text: str) -> str:
+    found = [word for word in FRAUD_KEYWORDS if word in text.lower()]
+    if found:
+        return f"🚨 ОПАСНО! Найдены фразы мошенников: {', '.join(found)}"
+    return "✅ Текст на скриншоте выглядит чистым."
+
+@dp.message(F.photo)
+async def handle_screenshot(message: types.Message):
+    # Уведомляем пользователя, что нейросеть начала работу
+    status_msg = await message.reply("🤖 Нейросеть анализирует скриншот...")
+    
+    # Скачиваем фото во временный файл
+    photo = message.photo[-1]
+    file_info = await bot.get_file(photo.file_id)
+    photo_path = f"temp_{photo.file_id}.jpg"
+    await bot.download_file(file_info.file_path, photo_path)
+
+    try:
+        # Распознаем текст с помощью EasyOCR
+        result = reader.readtext(photo_path, detail=0)
+        extracted_text = " ".join(result)
+        
+        if not extracted_text.strip():
+            await status_msg.edit_text("❌ Не удалось считать текст со скриншота.")
+        else:
+            # Проверяем текст на мошенничество
+            analysis_result = await analyze_fraud(extracted_text)
+            await status_msg.edit_text(f"🔍 **Результат сканирования:**\n\n{analysis_result}")
+            
+    finally:
+        if os.path.exists(photo_path):
+            os.remove(photo_path)
+
+@dp.message(Command("start"))
+async def start(message: types.Message):
+    await message.answer("Пришлите скриншот переписки, и я проверю его на признаки мошенничества!")
+
+async def main():
+    await dp.start_polling(bot)
+
+if __name__ == "__main__":
+    asyncio.run(main())
