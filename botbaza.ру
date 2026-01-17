@@ -1,0 +1,73 @@
+import asyncio
+from aiogram import Bot, Dispatcher, types, F
+from aiogram.filters import Command
+from sqlalchemy import create_engine, Column, String, Integer
+from sqlalchemy.orm import sessionmaker, declarative_base
+
+# --- Настройка Базы Данных ---
+Base = declarative_base()
+
+class FraudNumber(Base):
+    __tablename__ = 'fraud_numbers'
+    phone = Column(String, primary_key=True)
+    reports_count = Column(Integer, default=1)
+
+engine = create_engine('sqlite:///fraud_base.db')
+Base.metadata.create_all(engine)
+Session = sessionmaker(bind=engine)
+
+# --- Логика Бота ---
+TOKEN = "ВАШ_ТОКЕН"
+bot = Bot(token=TOKEN)
+dp = Dispatcher()
+
+def check_or_report(phone, report=False):
+    session = Session()
+    entry = session.query(FraudNumber).filter_by(phone=phone).first()
+    
+    if report:
+        if entry:
+            entry.reports_count += 1
+        else:
+            entry = FraudNumber(phone=phone)
+            session.add(entry)
+        session.commit()
+        count = entry.reports_count
+        session.close()
+        return count
+    
+    res = entry.reports_count if entry else 0
+    session.close()
+    return res
+
+@dp.message(Command("report"))
+async def cmd_report(message: types.Message):
+    # Пример: /report +79991234567
+    args = message.text.split()
+    if len(args) < 2:
+        return await message.answer("Введите номер: `/report +7...`", parse_mode="Markdown")
+    
+    phone = args[1].replace("-", "").replace(" ", "")
+    count = check_or_report(phone, report=True)
+    await message.answer(f"✅ Номер {phone} внесен в базу. Жалоб: {count}")
+
+@dp.message(F.text)
+async def check_message(message: types.Message):
+    # Поиск номеров телефонов в тексте сообщения
+    phones = re.findall(r"(\+7|8|7)[\s\-]?\(?\d{3}\)?[\s\-]?\d{3}[\s\-]?\d{2}[\s\-]?\d{2}", message.text)
+    
+    if phones:
+        for p in phones:
+            reports = check_or_report(p)
+            if reports > 0:
+                await message.reply(f"⚠️ **ВНИМАНИЕ!** Номер {p} найден в базе мошенников.\nНа него жаловались раз: {reports}")
+                return
+    
+    await message.answer("Проверка номера по базе завершена. Совпадений не найдено.")
+
+async def main():
+    await dp.start_polling(bot)
+
+if __name__ == "__main__":
+    import re
+    asyncio.run(main())
